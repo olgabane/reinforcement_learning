@@ -1,0 +1,83 @@
+\documentclass{article} % letter, article, report, book, memoir
+\begin{document}
+
+\begin{center}{\bf Reinforcement learning}: \emph{k}-armed bandit\\
+Written by Olga Bane (May 2020)\end{center}
+\vspace*{30pt}
+\noindent\emph{k}-armed bandit: {\bf agent} chooses between "k" {\bf actions} and receives a {\bf reward} for chosen action.\\\\
+Each action has expected reward  $q_{*}(a)$ ({\it value} of action).  We do {\it not} know the reward of each action (if we did, we would always select the action with the highest value), although we may have estimates $Q_{t}(a)$:
+
+\begin{center} {\it Ideally} $Q_{t}(a)$ is close to $q_{*}(a)$\end{center}
+
+\noindent
+$A_{t}$ = Action selected on time step {\it t} \\
+$T_{t}$ = Corresponding reward. \\
+$q_{*}(a)$ = The value of an arbitrary action {\it a} ({\it action-value})  = Expected reward given that {\it a} was selected. \\
+$Q_{t}(a)$ = estimated value of action {\it a} at timestep {\it t}. \\
+
+\[q_{*}(a) = E[R_{t} | A_{t}]\]
+
+\noindent{\bf Greedy actions} {\it exploit} knowledge: If we keep track of the estimated reward values of each action at each time step, then we can choose the action with the higher estimated reward. {\bf Non-greedy actions} enable you to improve the estimates of the action's value by {\it exploring}.
+\\\\
+Choice between {\it exploration} and {\it exploitation} is challenging, and depends on estimated reward values, uncertainties, and the number of remaining steps. 
+\\\\
+{\bf Estimating $Q_{t}(a)$, using the sample-average method}:
+\\\\
+One simple method: average the reward among the samples we've already seen ({\it sample average of observed reward}).\\
+
+$Q_{t}(a) = \frac{\textrm{sum of reward when {\it a} taken prior to {\it t}}}
+			{\textrm{number of times {\it a} taken prior to {\it t}}}
+		= \frac{\sum_{i=1}^{t-1} R_i || A_{i=a}}{\sum_{i=1}^{t-1} || A_{i=a}}$\\
+
+\noindent If the reward variance is 0, then the bandit would know the true reward value of an action after trying it only once. However, reward variance is often not 0, {\it and} the value of an action can also vary over time.
+
+Given that reward variance != 0, let's re-define the action-value:
+\[q_{*}(a) = E[R_{t} | A_{t}]\]
+\[ = \sum_{r}p(r|a)r, \textrm {where {\it p} is the probability of the reward.} \]
+
+\pagebreak 
+
+\noindent{\textit {\textbf {Action selection rules:}}}
+
+\begin{enumerate}
+	\item Simplest: Always choose the greedy action (action with the highest estimated value).
+	\item {\bf $\epsilon$-greedy}:  Behave greedily most of the time, but select randomly among all actions with equal probability, some fraction $\epsilon$ of the time.
+\end{enumerate}
+
+
+\noindent {\bf To update $Q_{t}(a)$} (the average of all previous rewards for this action) {\bf efficiently}, we need to only keep the previous $Q_{t}(a)$ value, the number of steps {\it n} at which this action has been selected. (${R_n}$ can be easily computed from these two values). 
+\\\\
+Update rule for a single action:
+ \\\\
+\[Q_{n} = \frac{R_1 + R_2 + ... + R_n}{n - 1}\]
+\[Q_{n+1} =  \frac{Q_n * (n-1) + R_n}{n} = Q_n + \frac{1}{n}(R_n - Q_n) \] 
+\\\\
+{\bf Generalized update rule: fill in }
+\\\\
+{\bf Update rule for stationary vs. non-stationary problems}\\\\
+In a {\bf stationary problem}, reward of action does not change. The averaging method described above is appropriate here. \\\\
+In a {\bf non-stationary problem}, reward of action changes. In this case, we might choose to give more weight to more recent rewards. One way to do this is to {\it use a constant step-size parameter, $\alpha$}, where $\alpha \in$ (0, 1], resulting in a weighted average of the initial estimate and past rewards:\\\\
+\[Q_{n+1} = Q_n + a(R_n - Q_n)\]
+\[= (1-\alpha)^nQ_1 + \sum_{i=1}^n\alpha(1-\alpha)^{n-i}R_i\]\\
+\begin{center}(Note that sum of weights = 1, and that weight decays exponentially.)\end{center}
+
+\pagebreak 
+
+\noindent{\bf How to determine initial action-value estimate, $Q_1(a)$}:\\\\
+This initial parameter must be set to {\it something}. It can be advantageous, as it allows the user to provide some prior knowledge. Setting {\bf optimistic} action-value estimates encourages exploration. However, there are limitations. For example, optimistic initial values encourage only early exploration.\\\
+
+
+\noindent {\bf An improvement on the $\epsilon$-greedy method to balance exploration and exploitation}:\\\\
+We must explore because greedy actions look best at present, but there may be other actions that are higher value. In $\epsilon$-greedy, we try all actions with equal probability. It would be better to select actions based on their potential for being optimal. To do this, we must take into account {\it value estimates} and {\it uncertainties}. In the equation below, the square root term is a measure of the variance (uncertainty) in the estimate: 
+
+\[A_t = argmax_a[Q_t(a) + c\sqrt{\frac{\ln t}{N_t(a)}}]\]
+
+\noindent {\bf Evaluating different methods:}\\\\
+We will need to average many (noisy) runs of the bandit (with each bandit taking the same amount of steps) to compare between algorithms. \\\\
+
+
+\noindent{\bf To do next}:\\
+1. Thompson sampling and Gittinis index.
+
+
+\end{document}
