@@ -1,0 +1,36 @@
+\documentclass{article} 
+\begin{document}
+
+\begin{center}{\bf Reinforcement learning}: Markov Decision Processes\\
+Written by Olga Bane (May 2020)\end{center}
+\vspace*{30pt}
+\noindent Markov decision processes (MDPs) describe {\bf sequential decision making} whereaby action influence immediate reward and subsequent states and rewards. There is therefore a need to {\bf tradeoff immediate and delayed reward} in MDP, as our goal (in reinforcement learning in general) is to maximize the total reward. \\
+
+\noindent In {\bf bandits}, we estimated the value of each action $a$ as $q_*(a)$.\\
+In {\bf MDPs}, we estimate the value of each action $a$ in each state $s$ as $q_*(s, a)$ or the value of each state $v_*(s)$ given optimal action selections.\\
+
+\noindent {\textbf {\textit {Agents and environments}}\\
+
+\noindent An {\bf agent} is the learner and decision maker that interacts with the {\bf environment}. The agent and the environment interact continuously at each time step: the agent performs an action based on the environment's {\bf state}, and the environment presents a {\bf new state} and a {\bf reward}, which the agent tries to maximize through its actions. \\\\
+The trajectory therefore begins: $S_0, A_0, R_1, S_1, A_1, R_2, S_2, A_2...$\\\\
+In a {\it finite} MDP, the sets of states, actions, and rewards are finite. States and Rewards at time {\it t} ($R_t, S_t$) are random variables that have well defined discrete probability distributions, which depend only on the preceding {\it immediate} State and Action ($S_{t-1}, A_{t-1}$). \
+\[p(s', r | s, a) = Pr\{S_t = s', R_t = r | S_{t-1} = s, A_{t-1} = a\}\]
+$p(s', r | s, a)$ defines the dynamics of the MDP. $p = S * R * S * A$, and specifies a probability distribution with AUC = 1. The must include all past agent-environment interactions that make a difference for the future (called the {\bf Markov property}).\\
+
+\noindent {\textbf {\textit {Goals and rewards}}\\
+
+\noindent The reward describes the {\bf goal} of the agent. The agent should not be rewarded for steps that we {\it think} would help the agent achieve the goal, but rather only for reaching the goal. \\
+
+\pagebreak 
+
+\noindent {\textbf {\textit {Returns and episodes}}\\
+
+\noindent The agent's goal is to {\bf maximize total expected total reward}, $G_t$. In the simplest case, the agent-environment interaction breaks into subsequences ({\it episodes}), where the final timestep $T$ is defined. The next episode begins independently of how the previous ended. Time of termination $T$ is a random variable that varies from episode to episode. 
+\[G_t = R_{t+1} + R_{t+2} +...+R_T\] 
+An agent-environment interaction could alternatively go on continuously, without the ability to define episodes or the final timestep $T$. This poses a difficulty - if $T$ could be {\it infinite}, then {\it the return that we are trying to maximize could also be infinite}.\\
+
+\noindent {\bf Next}:\\
+1. Discounted returns
+
+
+\end{document}
